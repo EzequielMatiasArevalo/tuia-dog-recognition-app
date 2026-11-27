@@ -2,13 +2,19 @@ from __future__ import annotations
 
 import json
 import logging
+from collections import defaultdict
 from pathlib import Path
 from typing import Callable, Optional
 from uuid import uuid4
 
 import cv2
 import numpy as np
+import torch
+import torch.nn as nn
+from torchvision import models
+from torchvision.models import ResNet18_Weights
 
+from lib.preprocessing import preprocess_bgr_image
 from lib.schemas import EmbeddingRecord, Neighbor, SearchResult
 from lib.storage.base import EmbeddingStoreProtocol
 
@@ -18,13 +24,10 @@ logger = logging.getLogger(__name__)
 class SimilarityService:
     """Etapa 1: buscador de imagenes por similitud.
 
-    Funciones a implementar por el estudiante:
+    Funciones implementadas:
       - extract_embedding(image)
       - search_similar_images(embedding, top_k)
       - predict_breed_from_neighbors(results)
-
-    La orquestacion (search, index_image, persistencia y metricas de similitud)
-    ya esta provista y no debe modificarse sin justificarlo en el Pull Request.
     """
 
     def __init__(
@@ -45,57 +48,105 @@ class SimilarityService:
         self.image_size = image_size
         self.model_name = model_name
         self.url_resolver = url_resolver
-        # DATA_PATH: las rutas de la galeria se guardan relativas a esta carpeta para que
-        # la base indexada desde el entorno local sirva tambien en Docker (y viceversa).
         self.data_root = data_root
+        self._backbone: Optional[nn.Module] = None
+        self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def _load_image(self, source_path: str) -> np.ndarray:
         image = cv2.imread(str(source_path))
         if image is None:
             raise ValueError(f"Could not read image: {source_path}")
-        # BGR uint8 (convencion OpenCV)
         return image
 
+    def _get_backbone(self) -> nn.Module:
+        """Carga y cachea ResNet18 pre-entrenada en ImageNet sin la capa fc (512 dims)."""
+        if self._backbone is None:
+            logger.info("Loading baseline feature extractor (ResNet18 ImageNet) on %s", self._device)
+            backbone = models.resnet18(weights=ResNet18_Weights.DEFAULT)
+            backbone.fc = nn.Identity()
+            backbone.eval()
+            backbone.to(self._device)
+            self._backbone = backbone
+        return self._backbone
+
     # ------------------------------------------------------------------
-    # Etapa 1: funciones a implementar
+    # Etapa 1: funciones implementadas
     # ------------------------------------------------------------------
 
     def extract_embedding(self, image: np.ndarray) -> list[float]:
-        """
-        Genera el embedding de una imagen usando un modelo pre-entrenado en
-        ImageNet (ej: ResNet50, EfficientNet, ConvNeXt) sin la capa de
-        clasificacion final.
+        """Genera un embedding L2-normalizado de 512 dimensiones usando ResNet18 ImageNet."""
+        tensor = preprocess_bgr_image(image, image_size=self.image_size)
+        batch = tensor.unsqueeze(0).to(self._device)
+        backbone = self._get_backbone()
+        with torch.no_grad():
+            features = backbone(batch).squeeze(0).detach().cpu().numpy().astype(np.float32)
 
-        Sugerencias:
-          - Preprocesar la imagen (resize a self.image_size, normalizacion ImageNet).
-          - Usar torchvision.models o timm con pesos pre-entrenados.
-          - Recordar que la imagen llega en BGR (OpenCV).
-        Retorna una lista de floats de dimension EMBEDDING_DIM.
-        """
-        raise NotImplementedError("Etapa 1: implementar extract_embedding")
+        norm = float(np.linalg.norm(features))
+        if norm > 0.0:
+            features = features / norm
+        return [float(x) for x in features]
 
     def search_similar_images(self, embedding: list[float], top_k: int) -> list[Neighbor]:
-        """
-        Recupera de la base vectorial las top_k imagenes mas similares.
+        """Recupera de la base vectorial las top_k imagenes mas similares ordenadas por score."""
+        k = max(1, int(top_k))
+        metric = self.similarity_metric.lower()
 
-        Sugerencias:
-          - Con pgvector: self.store.search(embedding, top_k).
-          - Con JSON: iterar self.store.all() y usar self.similarity(...).
-          - Respetar SIMILARITY_METRIC (cosine | l2).
-        Retorna una lista de Neighbor (path, breed, score) ordenada por score
-        descendente.
-        """
-        raise NotImplementedError("Etapa 1: implementar search_similar_images")
+        # Si el store soporta busqueda nativa por distancia coseno (pgvector <=>), delegar el top-k
+        search_fn = getattr(self.store, "search", None)
+        if metric == "cosine" and callable(search_fn):
+            records = search_fn(embedding, k)
+            scored = [
+                Neighbor(
+                    path=rec.path,
+                    breed=rec.breed,
+                    score=round(float(self.similarity(embedding, rec.embedding)), 6),
+                )
+                for rec in records
+            ]
+            scored.sort(key=lambda n: n.score, reverse=True)
+            return scored[:k]
+
+        records = self.store.all()
+        if not records:
+            return []
+
+        scored_all = [
+            Neighbor(
+                path=rec.path,
+                breed=rec.breed,
+                score=round(float(self.similarity(embedding, rec.embedding)), 6),
+            )
+            for rec in records
+        ]
+        scored_all.sort(key=lambda n: n.score, reverse=True)
+        return scored_all[:k]
 
     def predict_breed_from_neighbors(self, results: list[Neighbor]) -> tuple[str, float]:
-        """
-        Predice la raza a partir de los vecinos recuperados (ej: voto
-        mayoritario, opcionalmente ponderado por score).
+        """Predice la raza mediante voto mayoritario ponderado por similitud."""
+        if not results:
+            return ("unknown", 0.0)
 
-        Si el mejor score esta por debajo de self.similarity_threshold se
-        considera "unknown". Retorna (raza, score).
-        """
-        raise NotImplementedError("Etapa 1: implementar predict_breed_from_neighbors")
+        best_neighbor_score = max(float(r.score) for r in results)
+        if best_neighbor_score < self.similarity_threshold:
+            return ("unknown", best_neighbor_score)
+
+        breed_weights: dict[str, float] = defaultdict(float)
+        breed_scores: dict[str, list[float]] = defaultdict(list)
+
+        for neighbor in results:
+            score = float(neighbor.score)
+            breed_weights[neighbor.breed] += max(0.0, score)
+            breed_scores[neighbor.breed].append(score)
+
+        winning_breed = max(
+            breed_weights.keys(),
+            key=lambda b: (breed_weights[b], float(np.mean(breed_scores[b]))),
+        )
+        mean_breed_score = float(np.mean(breed_scores[winning_breed]))
+
+        if mean_breed_score < self.similarity_threshold:
+            return ("unknown", mean_breed_score)
+        return (winning_breed, mean_breed_score)
 
     # ------------------------------------------------------------------
     # Helpers de similitud provistos
@@ -123,7 +174,6 @@ class SimilarityService:
     # ------------------------------------------------------------------
 
     def _to_stored_path(self, image_path: str) -> str:
-        """Ruta relativa a DATA_PATH si la imagen esta dentro; si no, la ruta tal cual."""
         if self.data_root is None:
             return str(image_path)
         try:
@@ -132,24 +182,17 @@ class SimilarityService:
             return str(image_path)
 
     def resolve_path(self, stored_path: str) -> Path:
-        """Inversa de _to_stored_path: ruta local de una imagen guardada en la base."""
         path = Path(stored_path)
         if self.data_root is None or path.is_absolute():
             return path
         candidate = self.data_root / path
         if not candidate.exists() and path.exists():
-            # Base indexada antes de guardar rutas relativas a DATA_PATH.
             return path
         return candidate
 
     def index_image(
         self, image_path: str, breed: str, metadata: dict[str, object] | None = None
     ) -> EmbeddingRecord:
-        """Extrae el embedding de una imagen del dataset y lo persiste en la base vectorial.
-
-        La ruta se guarda relativa a DATA_PATH (ej: dataset/train/<raza>/<imagen>.jpg).
-        Para leer la imagen a partir de un registro, usar resolve_path(record.path).
-        """
         image = self._load_image(image_path)
         embedding = self.extract_embedding(image)
         record = EmbeddingRecord(
@@ -175,12 +218,6 @@ class SimilarityService:
         model_name: Optional[str] = None,
         top_k: Optional[int] = None,
     ) -> str:
-        """Pipeline completo de la Etapa 1: embedding -> vecinos -> raza predicha.
-
-        `embedding_fn` permite seleccionar dinamicamente el extractor
-        (baseline, resnet18_finetuned o cnn_custom, ver Etapa 2).
-        Escribe el resultado como JSON en `output_path` y retorna su ruta.
-        """
         image = self._load_image(source_path)
         extractor = embedding_fn or self.extract_embedding
         embedding = extractor(image)

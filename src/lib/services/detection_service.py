@@ -3,11 +3,15 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
+from typing import Any
 from uuid import uuid4
 
 import cv2
 import numpy as np
+import onnxruntime
+import torch
 
+from lib.preprocessing import normalize_breed_name, preprocess_bgr_image
 from lib.schemas import ClassifyResult, DetectResult, DogDetection
 from lib.services.classifier_service import ClassifierService
 
@@ -17,12 +21,9 @@ logger = logging.getLogger(__name__)
 class DetectionService:
     """Etapa 3: pipeline de deteccion y clasificacion.
 
-    Funciones a implementar por el estudiante:
+    Funciones implementadas:
       - detect_dogs(image)
       - classify_detected_dog(crop)
-
-    La orquestacion (predict: deteccion -> recorte -> clasificacion -> JSON)
-    ya esta provista.
     """
 
     def __init__(
@@ -36,6 +37,8 @@ class DetectionService:
         self.yolo_model_name = yolo_model
         self.conf_threshold = conf_threshold
         self.dog_class_id = dog_class_id
+        self._detector: Any = None
+        self._class_names: list[str] | None = None
 
     @staticmethod
     def _clip_xyxy(
@@ -55,36 +58,114 @@ class DetectionService:
         image = cv2.imread(str(source_path))
         if image is None:
             raise ValueError(f"Could not read image: {source_path}")
-        # BGR uint8 (convencion OpenCV / ultralytics)
         return image
 
+    def _get_detector(self) -> Any:
+        """Carga y cachea el detector YOLO pre-entrenado una sola vez."""
+        if self._detector is None:
+            from ultralytics import YOLO
+
+            model_path = Path(self.yolo_model_name)
+            if model_path.parent != Path("."):
+                model_path.parent.mkdir(parents=True, exist_ok=True)
+            logger.info(
+                "Loading YOLO detector '%s' (conf=%.2f, dog_class_id=%d)",
+                self.yolo_model_name,
+                self.conf_threshold,
+                self.dog_class_id,
+            )
+            self._detector = YOLO(self.yolo_model_name)
+        return self._detector
+
+    def _resolve_class_names(self, model: Any) -> list[str]:
+        """Obtiene la lista ordenada de razas desde el checkpoint o classes.json."""
+        ckpt_classes = getattr(model, "class_names", None)
+        if ckpt_classes:
+            return [str(c) for c in ckpt_classes]
+
+        if self._class_names is not None:
+            return self._class_names
+
+        classes_json = self.classifier.dataset_path.parent / "classes.json"
+        if classes_json.is_file():
+            payload = json.loads(classes_json.read_text(encoding="utf-8"))
+            self._class_names = [str(c) for c in payload["classes"]]
+            return self._class_names
+
+        train_dir = self.classifier.dataset_path / "train"
+        if train_dir.is_dir():
+            self._class_names = sorted(
+                normalize_breed_name(p.name) for p in train_dir.iterdir() if p.is_dir()
+            )
+            return self._class_names
+
+        raise ValueError("No se pudo resolver la lista de clases del clasificador.")
+
     # ------------------------------------------------------------------
-    # Etapa 3: funciones a implementar
+    # Etapa 3: funciones implementadas
     # ------------------------------------------------------------------
 
     def detect_dogs(self, image: np.ndarray) -> list[tuple[tuple[int, int, int, int], float]]:
-        """
-        Detecta todos los perros presentes en la imagen usando un modelo YOLO
-        pre-entrenado (ej: YOLOv8n via ultralytics). No es necesario entrenar
-        el detector.
+        """Detecta todos los perros presentes en una imagen BGR uint8 usando YOLO."""
+        if image is None or image.size == 0:
+            raise ValueError("Input image is empty.")
 
-        Sugerencias:
-          - self.yolo_model_name, self.conf_threshold y self.dog_class_id
-            (clase 'dog' = 16 en COCO) vienen de la configuracion (.env).
-          - Debe funcionar con un perro, multiples perros y escenas complejas.
+        height, width = image.shape[:2]
+        detector = self._get_detector()
+        results = detector.predict(
+            source=image,
+            conf=self.conf_threshold,
+            classes=[self.dog_class_id],
+            verbose=False,
+        )
 
-        Retorna una lista de ((x1, y1, x2, y2), confidence) en pixeles.
-        """
-        raise NotImplementedError("Etapa 3: implementar detect_dogs")
+        if not results or results[0].boxes is None or len(results[0].boxes) == 0:
+            return []
+
+        boxes_xyxy = results[0].boxes.xyxy.cpu().numpy()
+        confs = results[0].boxes.conf.cpu().numpy()
+
+        detections: list[tuple[tuple[int, int, int, int], float]] = []
+        for box, conf in zip(boxes_xyxy, confs):
+            x1, y1, x2, y2 = self._clip_xyxy(
+                int(round(float(box[0]))),
+                int(round(float(box[1]))),
+                int(round(float(box[2]))),
+                int(round(float(box[3]))),
+                height,
+                width,
+            )
+            detections.append(((x1, y1, x2, y2), float(conf)))
+
+        detections.sort(key=lambda item: item[1], reverse=True)
+        return detections
 
     def classify_detected_dog(self, crop: np.ndarray) -> tuple[str, float]:
-        """
-        Clasifica la raza del recorte de un perro detectado usando el modelo
-        entrenado en la Etapa 2 (self.classifier.load_model()).
+        """Clasifica la raza de un recorte BGR uint8 usando el clasificador activo."""
+        if crop is None or crop.size == 0:
+            return ("unknown", 0.0)
 
-        El recorte llega en BGR (OpenCV). Retorna (raza, score).
-        """
-        raise NotImplementedError("Etapa 3: implementar classify_detected_dog")
+        tensor = preprocess_bgr_image(crop, image_size=self.classifier.image_size)
+        batch = tensor.unsqueeze(0)
+        model = self.classifier.load_model()
+
+        if isinstance(model, onnxruntime.InferenceSession):
+            input_name = model.get_inputs()[0].name
+            logits = model.run(None, {input_name: batch.numpy()})[0][0]
+            exp_logits = np.exp(logits - np.max(logits))
+            probs = exp_logits / np.sum(exp_logits)
+        else:
+            device = next(model.parameters()).device
+            model.eval()
+            with torch.no_grad():
+                logits = model(batch.to(device))
+                probs = torch.softmax(logits, dim=1).squeeze(0).cpu().numpy()
+
+        pred_idx = int(np.argmax(probs))
+        score = float(probs[pred_idx])
+        class_names = self._resolve_class_names(model)
+        breed = class_names[pred_idx] if 0 <= pred_idx < len(class_names) else "unknown"
+        return (breed, score)
 
     # ------------------------------------------------------------------
     # Orquestacion provista
@@ -93,15 +174,8 @@ class DetectionService:
     def classify_image(
         self, source_path: str, output_path: Path, model_name: str | None = None
     ) -> str:
-        """Clasifica la imagen completa con el modelo entrenado (pestaña Etapa 2).
-
-        Reutiliza classify_detected_dog tratando la imagen entera como recorte,
-        por lo que requiere la Etapa 2 (modelo entrenado) y classify_detected_dog.
-        Escribe el resultado como JSON en `output_path` y retorna su ruta.
-        """
+        """Clasifica la imagen completa con el modelo entrenado (pestaña Etapa 2)."""
         image = self._load_image(source_path)
-        # El modelo elegido vale solo para esta clasificacion: se restaura el activo para
-        # que /detect siga usando el modelo configurado.
         previous = self.classifier.active_model_name
         if model_name:
             self.classifier.set_active_model(model_name)
@@ -124,10 +198,7 @@ class DetectionService:
         return str(result_file)
 
     def predict(self, source_path: str, output_path: Path) -> str:
-        """Flujo completo: deteccion -> bounding boxes -> recortes -> clasificacion.
-
-        Escribe el resultado como JSON en `output_path` y retorna su ruta.
-        """
+        """Flujo completo: deteccion -> bounding boxes -> recortes -> clasificacion."""
         image = self._load_image(source_path)
         height, width = image.shape[:2]
 

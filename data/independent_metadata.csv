@@ -1,0 +1,164 @@
+rel_path,scenario,breed,width,height,source,license,identifiable_persons
+dataset/independent/_multi_dog/01.jpg,multi_dog,multi_dog,3888,5184,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/02.jpg,multi_dog,multi_dog,3694,5541,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/03.jpg,multi_dog,multi_dog,5784,3861,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/04.jpg,multi_dog,multi_dog,7952,5304,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/05.jpg,multi_dog,multi_dog,4896,3264,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/06.jpg,multi_dog,multi_dog,4658,2830,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/07.jpg,multi_dog,multi_dog,2000,2500,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/08.jpg,multi_dog,multi_dog,5429,3619,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/09.jpg,multi_dog,multi_dog,6960,4640,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/10.jpg,multi_dog,multi_dog,6960,4640,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/11.jpg,multi_dog,multi_dog,3840,2561,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/12.jpg,multi_dog,multi_dog,5712,4284,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/13.jpg,multi_dog,multi_dog,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/14.jpg,multi_dog,multi_dog,3008,2000,Unsplash,Unsplash License,False
+dataset/independent/_multi_dog/15.jpg,multi_dog,multi_dog,3049,4573,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/01.jpg,no_dog,no_dog,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/02.jpg,no_dog,no_dog,4000,4000,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/03.jpg,no_dog,no_dog,7008,4672,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/04.jpg,no_dog,no_dog,4005,2670,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/05.jpg,no_dog,no_dog,3057,4585,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/06.jpg,no_dog,no_dog,3301,4913,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/07.jpg,no_dog,no_dog,2853,3803,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/08.jpg,no_dog,no_dog,2848,4288,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/09.jpg,no_dog,no_dog,5472,3648,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/10.jpg,no_dog,no_dog,2155,3232,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/11.jpg,no_dog,no_dog,4272,2848,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/12.jpg,no_dog,no_dog,5464,5464,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/13.jpg,no_dog,no_dog,4928,3280,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/14.jpg,no_dog,no_dog,2712,4068,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/15.jpg,no_dog,no_dog,3264,4896,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/16.jpg,no_dog,no_dog,2425,3622,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/17.jpg,no_dog,no_dog,2667,4000,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/18.jpg,no_dog,no_dog,3840,5760,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/19.jpg,no_dog,no_dog,5616,3744,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/20.jpg,no_dog,no_dog,5016,3343,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/21.jpg,no_dog,no_dog,5760,3840,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/22.jpg,no_dog,no_dog,3465,2131,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/23.jpg,no_dog,no_dog,4928,3280,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/24.jpg,no_dog,no_dog,4239,2808,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/25.jpg,no_dog,no_dog,4016,6016,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/26.jpg,no_dog,no_dog,3692,2771,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/27.jpg,no_dog,no_dog,2002,3000,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/28.jpg,no_dog,no_dog,3522,5283,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/29.jpg,no_dog,no_dog,4409,6613,Unsplash,Unsplash License,False
+dataset/independent/_no_dog/30.jpg,no_dog,no_dog,1920,1200,Unsplash,Unsplash License,False
+dataset/independent/Afghan/01.jpg,single_dog,Afghan,4053,3242,Unsplash,Unsplash License,False
+dataset/independent/Afghan/02.jpg,single_dog,Afghan,5456,3632,Unsplash,Unsplash License,False
+dataset/independent/African Wild Dog/01.jpg,single_dog,African Wild Dog,4640,6960,Unsplash,Unsplash License,False
+dataset/independent/African Wild Dog/02.jpg,single_dog,African Wild Dog,3648,5472,Unsplash,Unsplash License,False
+dataset/independent/Airedale/01.jpg,single_dog,Airedale,4480,5600,Unsplash,Unsplash License,False
+dataset/independent/Airedale/02.jpg,single_dog,Airedale,2667,4000,Unsplash,Unsplash License,False
+dataset/independent/American Spaniel/01.jpg,single_dog,American Spaniel,2309,3463,Unsplash,Unsplash License,False
+dataset/independent/American Spaniel/02.jpg,single_dog,American Spaniel,5941,3961,Unsplash,Unsplash License,False
+dataset/independent/Basenji/01.jpg,single_dog,Basenji,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Basenji/02.jpg,single_dog,Basenji,3072,4096,Unsplash,Unsplash License,False
+dataset/independent/Basset/01.jpg,single_dog,Basset,3120,4160,Unsplash,Unsplash License,False
+dataset/independent/Basset/02.jpg,single_dog,Basset,4966,3311,Unsplash,Unsplash License,False
+dataset/independent/Beagle/01.jpg,single_dog,Beagle,3866,2586,Unsplash,Unsplash License,False
+dataset/independent/Beagle/02.jpg,single_dog,Beagle,3571,5357,Unsplash,Unsplash License,False
+dataset/independent/Bearded Collie/01.jpg,single_dog,Bearded Collie,6866,5149,Unsplash,Unsplash License,False
+dataset/independent/Bearded Collie/02.jpg,single_dog,Bearded Collie,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/Bichon Frise/01.jpg,single_dog,Bichon Frise,2662,3994,Unsplash,Unsplash License,False
+dataset/independent/Bichon Frise/02.jpg,single_dog,Bichon Frise,4032,3024,Unsplash,Unsplash License,False
+dataset/independent/Blenheim/01.jpg,single_dog,Blenheim,3024,2698,Unsplash,Unsplash License,False
+dataset/independent/Blenheim/02.jpg,single_dog,Blenheim,3840,2560,Unsplash,Unsplash License,False
+dataset/independent/Border Collie/01.jpg,single_dog,Border Collie,2175,3275,Unsplash,Unsplash License,False
+dataset/independent/Border Collie/02.jpg,single_dog,Border Collie,4160,6240,Unsplash,Unsplash License,False
+dataset/independent/Borzoi/01.jpg,single_dog,Borzoi,4480,5600,Unsplash,Unsplash License,False
+dataset/independent/Borzoi/02.jpg,single_dog,Borzoi,1993,3000,Unsplash,Unsplash License,False
+dataset/independent/Boston Terrier/01.jpg,single_dog,Boston Terrier,3785,5678,Unsplash,Unsplash License,False
+dataset/independent/Boston Terrier/02.jpg,single_dog,Boston Terrier,3172,4758,Unsplash,Unsplash License,False
+dataset/independent/Boxer/01.jpg,single_dog,Boxer,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Boxer/02.jpg,single_dog,Boxer,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Bull Mastiff/01.jpg,single_dog,Bull Mastiff,2320,3390,Unsplash,Unsplash License,False
+dataset/independent/Bull Mastiff/02.jpg,single_dog,Bull Mastiff,4608,2521,Unsplash,Unsplash License,False
+dataset/independent/Bull Terrier/01.jpg,single_dog,Bull Terrier,2646,2646,Unsplash,Unsplash License,False
+dataset/independent/Bull Terrier/02.jpg,single_dog,Bull Terrier,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/Bulldog/01.jpg,single_dog,Bulldog,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/Bulldog/02.jpg,single_dog,Bulldog,4692,3128,Unsplash,Unsplash License,False
+dataset/independent/Cairn/01.jpg,single_dog,Cairn,6960,4640,Unsplash,Unsplash License,False
+dataset/independent/Cairn/02.jpg,single_dog,Cairn,4640,6960,Unsplash,Unsplash License,False
+dataset/independent/Chihuahua/01.jpg,single_dog,Chihuahua,4608,3072,Unsplash,Unsplash License,False
+dataset/independent/Chihuahua/02.jpg,single_dog,Chihuahua,5337,3558,Unsplash,Unsplash License,False
+dataset/independent/Chinese Crested/01.jpg,single_dog,Chinese Crested,4997,3331,Unsplash,Unsplash License,False
+dataset/independent/Chinese Crested/02.jpg,single_dog,Chinese Crested,2160,3240,Unsplash,Unsplash License,False
+dataset/independent/Chow/01.jpg,single_dog,Chow,3195,4694,Unsplash,Unsplash License,False
+dataset/independent/Chow/02.jpg,single_dog,Chow,3456,5184,Unsplash,Unsplash License,False
+dataset/independent/Cockapoo/01.jpg,single_dog,Cockapoo,5184,3456,Unsplash,Unsplash License,False
+dataset/independent/Cockapoo/02.jpg,single_dog,Cockapoo,5464,8192,Unsplash,Unsplash License,False
+dataset/independent/Cocker/01.jpg,single_dog,Cocker,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Cocker/02.jpg,single_dog,Cocker,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/Collie/01.jpg,single_dog,Collie,4368,2912,Unsplash,Unsplash License,False
+dataset/independent/Collie/02.jpg,single_dog,Collie,2848,4272,Unsplash,Unsplash License,False
+dataset/independent/Corgi/01.jpg,single_dog,Corgi,3526,5289,Unsplash,Unsplash License,False
+dataset/independent/Corgi/02.jpg,single_dog,Corgi,2242,3363,Unsplash,Unsplash License,False
+dataset/independent/Coyote/01.jpg,single_dog,Coyote,5941,3961,Unsplash,Unsplash License,False
+dataset/independent/Coyote/02.jpg,single_dog,Coyote,2941,3676,Unsplash,Unsplash License,False
+dataset/independent/Dalmation/01.jpg,single_dog,Dalmation,2094,2950,Unsplash,Unsplash License,False
+dataset/independent/Dalmation/02.jpg,single_dog,Dalmation,4912,7360,Unsplash,Unsplash License,False
+dataset/independent/Dhole/01.jpg,single_dog,Dhole,3093,4640,Unsplash,Unsplash License,False
+dataset/independent/Dhole/02.jpg,single_dog,Dhole,3791,2527,Unsplash,Unsplash License,False
+dataset/independent/Dingo/01.jpg,single_dog,Dingo,3899,6128,Unsplash,Unsplash License,False
+dataset/independent/Dingo/02.jpg,single_dog,Dingo,6000,4000,Unsplash,Unsplash License,False
+dataset/independent/Doberman/01.jpg,single_dog,Doberman,2442,3254,Unsplash,Unsplash License,False
+dataset/independent/Doberman/02.jpg,single_dog,Doberman,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/French Bulldog/01.jpg,single_dog,French Bulldog,4832,4760,Unsplash,Unsplash License,False
+dataset/independent/French Bulldog/02.jpg,single_dog,French Bulldog,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/German Sheperd/01.jpg,single_dog,German Sheperd,4640,6960,Unsplash,Unsplash License,False
+dataset/independent/German Sheperd/02.jpg,single_dog,German Sheperd,6716,4797,Unsplash,Unsplash License,False
+dataset/independent/Golden Retriever/01.jpg,single_dog,Golden Retriever,3742,6000,Unsplash,Unsplash License,False
+dataset/independent/Golden Retriever/02.jpg,single_dog,Golden Retriever,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/Great Dane/01.jpg,single_dog,Great Dane,4831,6039,Unsplash,Unsplash License,False
+dataset/independent/Great Dane/02.jpg,single_dog,Great Dane,3557,2667,Unsplash,Unsplash License,False
+dataset/independent/Greyhound/01.jpg,single_dog,Greyhound,3686,5529,Unsplash,Unsplash License,False
+dataset/independent/Greyhound/02.jpg,single_dog,Greyhound,3960,2640,Unsplash,Unsplash License,False
+dataset/independent/Groenendael/01.jpg,single_dog,Groenendael,3464,2309,Unsplash,Unsplash License,False
+dataset/independent/Groenendael/02.jpg,single_dog,Groenendael,5472,3648,Unsplash,Unsplash License,False
+dataset/independent/Irish Spaniel/01.jpg,single_dog,Irish Spaniel,3259,2185,Unsplash,Unsplash License,False
+dataset/independent/Irish Wolfhound/01.jpg,single_dog,Irish Wolfhound,3644,3712,Unsplash,Unsplash License,False
+dataset/independent/Irish Wolfhound/02.jpg,single_dog,Irish Wolfhound,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Japanese Spaniel/01.jpg,single_dog,Japanese Spaniel,4453,3181,Unsplash,Unsplash License,False
+dataset/independent/Japanese Spaniel/02.jpg,single_dog,Japanese Spaniel,6000,4000,Unsplash,Unsplash License,False
+dataset/independent/Komondor/01.jpg,single_dog,Komondor,6471,4291,Unsplash,Unsplash License,False
+dataset/independent/Labradoodle/01.jpg,single_dog,Labradoodle,4272,2848,Unsplash,Unsplash License,False
+dataset/independent/Labradoodle/02.jpg,single_dog,Labradoodle,3648,5472,Unsplash,Unsplash License,False
+dataset/independent/Labrador/01.jpg,single_dog,Labrador,3649,5444,Unsplash,Unsplash License,False
+dataset/independent/Labrador/02.jpg,single_dog,Labrador,3052,4578,Unsplash,Unsplash License,False
+dataset/independent/Lhasa/01.jpg,single_dog,Lhasa,6000,4000,Unsplash,Unsplash License,False
+dataset/independent/Lhasa/02.jpg,single_dog,Lhasa,5121,3532,Unsplash,Unsplash License,False
+dataset/independent/Malinois/01.jpg,single_dog,Malinois,5660,3839,Unsplash,Unsplash License,False
+dataset/independent/Malinois/02.jpg,single_dog,Malinois,3264,4928,Unsplash,Unsplash License,False
+dataset/independent/Maltese/01.jpg,single_dog,Maltese,6000,4000,Unsplash,Unsplash License,False
+dataset/independent/Maltese/02.jpg,single_dog,Maltese,4561,3041,Unsplash,Unsplash License,False
+dataset/independent/Pekinese/01.jpg,single_dog,Pekinese,6720,4480,Unsplash,Unsplash License,False
+dataset/independent/Pekinese/02.jpg,single_dog,Pekinese,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/Pit Bull/01.jpg,single_dog,Pit Bull,6000,4000,Unsplash,Unsplash License,False
+dataset/independent/Pit Bull/02.jpg,single_dog,Pit Bull,3239,4858,Unsplash,Unsplash License,False
+dataset/independent/Pomeranian/01.jpg,single_dog,Pomeranian,2268,4032,Unsplash,Unsplash License,False
+dataset/independent/Pomeranian/02.jpg,single_dog,Pomeranian,2368,3552,Unsplash,Unsplash License,False
+dataset/independent/Poodle/01.jpg,single_dog,Poodle,3701,4919,Unsplash,Unsplash License,False
+dataset/independent/Poodle/02.jpg,single_dog,Poodle,4672,7008,Unsplash,Unsplash License,False
+dataset/independent/Pug/01.jpg,single_dog,Pug,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Pug/02.jpg,single_dog,Pug,3456,5184,Unsplash,Unsplash License,False
+dataset/independent/Rhodesian/01.jpg,single_dog,Rhodesian,4896,3264,Unsplash,Unsplash License,False
+dataset/independent/Rhodesian/02.jpg,single_dog,Rhodesian,4518,3133,Unsplash,Unsplash License,False
+dataset/independent/Rottweiler/01.jpg,single_dog,Rottweiler,7360,4912,Unsplash,Unsplash License,False
+dataset/independent/Rottweiler/02.jpg,single_dog,Rottweiler,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Saint Bernard/01.jpg,single_dog,Saint Bernard,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Saint Bernard/02.jpg,single_dog,Saint Bernard,4706,3582,Unsplash,Unsplash License,False
+dataset/independent/Schnauzer/01.jpg,single_dog,Schnauzer,7785,5190,Unsplash,Unsplash License,False
+dataset/independent/Schnauzer/02.jpg,single_dog,Schnauzer,3000,4000,Unsplash,Unsplash License,False
+dataset/independent/Shar_Pei/01.jpg,single_dog,Shar_Pei,6000,4000,Unsplash,Unsplash License,False
+dataset/independent/Shar_Pei/02.jpg,single_dog,Shar_Pei,7785,5190,Unsplash,Unsplash License,False
+dataset/independent/Shiba Inu/01.jpg,single_dog,Shiba Inu,3832,5748,Unsplash,Unsplash License,False
+dataset/independent/Shiba Inu/02.jpg,single_dog,Shiba Inu,3330,3330,Unsplash,Unsplash License,False
+dataset/independent/Shih-Tzu/01.jpg,single_dog,Shih-Tzu,2832,4240,Unsplash,Unsplash License,False
+dataset/independent/Shih-Tzu/02.jpg,single_dog,Shih-Tzu,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Siberian Husky/01.jpg,single_dog,Siberian Husky,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/Siberian Husky/02.jpg,single_dog,Siberian Husky,4000,6000,Unsplash,Unsplash License,False
+dataset/independent/Vizsla/01.jpg,single_dog,Vizsla,4000,5000,Unsplash,Unsplash License,False
+dataset/independent/Vizsla/02.jpg,single_dog,Vizsla,3024,4032,Unsplash,Unsplash License,False
+dataset/independent/Yorkie/01.jpg,single_dog,Yorkie,4024,6048,Unsplash,Unsplash License,False
+dataset/independent/Yorkie/02.jpg,single_dog,Yorkie,4000,6000,Unsplash,Unsplash License,False
